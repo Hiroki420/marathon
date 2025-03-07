@@ -1,0 +1,144 @@
+# 伊江島マラソンサイト - CSS・JS実装ガイド
+
+このガイドでは、伊江島マラソンサイトにデザイン性を追加するためのCSS実装と、スクロールアニメーションを実現するためのJavaScriptの組み込み方法を説明します。
+
+## GitHubでの実装手順
+
+### 1. CSSファイルの作成
+
+1. GitHubリポジトリで「Add file」→「Create new file」を選択
+2. ファイル名に `styles.css` と入力
+3. 提供したCSSコードをコピー＆ペーストします
+4. 「Commit new file」ボタンをクリックして保存
+
+### 2. HTMLファイルの更新
+
+既存のHTMLファイル（index.html）を更新して、新しいCSSファイルをリンクし、JavaScriptを追加します：
+
+1. index.htmlファイルをクリック
+2. 編集ボタン（鉛筆アイコン）をクリック
+3. `<head>` タグ内に以下のリンクを追加（既存のスタイルの代わりに）：
+
+```html
+
+```
+
+4. `</body>` タグの直前に以下のJavaScriptコードを追加：
+
+```html
+
+document.addEventListener('DOMContentLoaded', function() {
+    // 各セクションにfade-inクラスを追加
+    const sections = document.querySelectorAll('.members-section, .schedule-section, .location-section');
+    sections.forEach(section => {
+        section.classList.add('fade-in');
+    });
+    
+    // スクロール時のアニメーション
+    function checkScroll() {
+        const fadeElements = document.querySelectorAll('.fade-in');
+        fadeElements.forEach(element => {
+            const elementTop = element.getBoundingClientRect().top;
+            const windowHeight = window.innerHeight;
+            if (elementTop < windowHeight - 100) {
+                element.classList.add('visible');
+            }
+        });
+        
+        // タイムラインアイテムのアニメーション
+        const timelineItems = document.querySelectorAll('.timeline-item');
+        timelineItems.forEach(item => {
+            const itemTop = item.getBoundingClientRect().top;
+            if (itemTop < window.innerHeight - 50) {
+                item.classList.add('visible');
+            }
+        });
+    }
+    
+    // 初回チェック
+    checkScroll();
+    
+    // スクロール時にチェック
+    window.addEventListener('scroll', checkScroll);
+    
+    // タブの切り替え
+    const dayTabs = document.querySelectorAll('.day-tab');
+    const scheduleContents = document.querySelectorAll('.schedule-content');
+    
+    dayTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const day = tab.getAttribute('data-day');
+            
+            // タブのアクティブ状態を切り替え
+            dayTabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            
+            // コンテンツの表示を切り替え
+            scheduleContents.forEach(content => {
+                content.classList.remove('active');
+                if (content.id === day) {
+                    content.classList.add('active');
+                }
+            });
+            
+            // タイムラインアイテムのアニメーションをリセット
+            const timelineItems = document.querySelectorAll(`#${day} .timeline-item`);
+            timelineItems.forEach((item, index) => {
+                item.classList.remove('visible');
+                setTimeout(() => {
+                    item.classList.add('visible');
+                }, index * 100);
+            });
+        });
+    });
+});
+
+```
+
+5. 「Commit changes」ボタンをクリックして保存
+
+### 3. フォントの追加
+
+Google Fontsを使用するために、HTMLの`<head>`セクションに以下のコードを追加します：
+
+```html
+
+
+
+```
+
+### 4. 実際の画像の追加（オプション）
+
+プレースホルダー画像を実際の写真に置き換える場合：
+
+1. 画像ファイルをGitHubリポジトリにアップロード（「Add file」→「Upload files」）
+2. 画像は「images」フォルダを作成して整理するのがおすすめです
+3. HTMLファイル内の画像パスを更新します：
+   - `/api/placeholder/400/400` を `images/あなたの画像ファイル名.jpg` などに変更
+
+## スタイルのカスタマイズ
+
+### カラーテーマの変更
+
+styles.cssファイルの先頭にある`:root`セクションで色を変更できます：
+
+```css
+:root {
+    --primary: #色コード;
+    --primary-light: #色コード;
+    --secondary: #色コード;
+    --secondary-light: #色コード;
+    --accent: #色コード;
+    /* 他の色も同様に変更可能 */
+}
+```
+
+### アニメーション効果の調整
+
+より強いアニメーション効果が欲しい場合は、以下のセクションの値を調整します：
+
+```css
+.member-card:hover {
+    transform: translateY(-15px) scale(1.03); /* 値を大きくするとより強い効果になります */
+}
+```

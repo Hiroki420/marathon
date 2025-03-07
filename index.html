@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025伊江島マラソン＆観光 | スケジュール管理</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        :root {
+            --primary: #0088cc;
+            --secondary: #00cc88;
+            --accent: #ffbb33;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --text: #34495e;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--text);
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('/api/placeholder/1920/1080');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.1;
+            z-index: -1;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 3rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            width: 150%;
+            height: 100px;
+            background: rgba(255,255,255,0.1);
+            transform: rotate(-5deg);
+            top: -50px;
+            left: -25%;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            position: relative;
+        }
+        
+        .logo::after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--accent);
+            transition: width 0.3s ease;
+        }
+        
+        .logo:hover::after {
+            width: 100%;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        nav a::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+            z-index: -1;
+        }
+        
+        nav a:hover::before {
+            left: 0;
+        }
+        
+        .hero {
+            text-align: center;
+            margin: 4rem 0;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: fadeInUp 1s ease;
+        }
+        
+        .hero p {
+            font-size: 1.25rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+            color: var(--dark);
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 50px;
+            font-weight: bold;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            animation: bounceIn 1s ease 0.4s both;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-button::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: all 0.6s ease;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .cta-button:hover::before {
+            left: 100%;
+        }
+        
+        .members-section {
+            margin: 6rem 0;
+            position: relative;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+        
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .member-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.5s ease forwards;
+        }
+        
+        .member-card:nth-child(1) { animation-delay: 0.1s; }
+        .member-card:nth-child(2) { animation-delay: 0.2s; }
+        .member-card:nth-child(3) { animation-delay: 0.3s; }
+        .member-card:nth-child(4) { animation-delay: 0.4s; }
+        .member-card:nth-child(5) { animation-delay: 0.5s; }
+        
+        .member-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .member-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-bottom: 3px solid var(--primary);
+        }
+        
+        .member-info {
+            padding: 1.5rem;
+        }
+        
+        .member-name {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .member-role {
+            color: var(--primary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .member-desc {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--text);
+        }
+        
+        .schedule-section {
+            margin: 6rem 0;
+            position: relative;
+        }
+        
+        .day-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+        
+        .day-tab {
+            padding: 1rem 2rem;
+            background-color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            position: relative;
+            margin: 0 0.5rem;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .day-tab.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+        
+        .day-tab:not(.active):hover {
+            background-color: rgba(255,255,255,0.9);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .schedule-content {
+            display: none;
+        }
+        
+        .schedule-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .timeline {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background: linear-gradient(var(--primary), var(--secondary));
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+            border-radius: 5px;
+        }
+        
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            box-sizing: border-box;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.5s ease;
+        }
+        
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .timeline-item:nth-child(odd) {
+            left: 0;
+        }
+        
+        .timeline-item:nth-child(even) {
+            left: 50%;
+        }
+        
+        .timeline-content {
+            padding: 20px 30px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .timeline-content:hover {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transform: translateY(-5px);
+        }
+        
+        .timeline-item:nth-child(odd) .timeline-content {
+            border-left: 4px solid var(--primary);
+        }
+        
+        .timeline-item:nth-child(even) .timeline-content {
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .timeline-content h3 {
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .timeline-date {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background-color: white;
+            border: 4px solid var(--primary);
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+        
+        .timeline-item:nth-child(odd)::after {
+            right: -13px;
+        }
+        
+        .timeline-item:nth-child(even)::after {
+            left: -13px;
+        }
+        
+        .location-section {
+            margin: 6rem 0;
+        }
+        
+        .location-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .location-card {
+            background-color: white;
+            border-radius:
+            10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.5s ease forwards;
+        }
+        
+        .location-card:nth-child(1) { animation-delay: 0.1s; }
+        .location-card:nth-child(2) { animation-delay: 0.2s; }
+        .location-card:nth-child(3) { animation-delay: 0.3s; }
+        .location-card:nth-child(4) { animation-delay: 0.4s; }
+        
+        .location-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .location-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .location-info {
+            padding: 1.5rem;
+        }
+        
+        .location-name {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .location-desc {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+        
+        .location-address {
+            display: flex;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--text);
+        }
+        
+        .location-address i {
+            color: var(--primary);
+            margin-right: 0.5rem;
+        }
+        
+        footer {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+            margin-top: 6rem;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+        
+        .footer-social {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .footer-social a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-social a:hover {
+            background-color: var(--accent);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        /* メディアクエリ */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .logo {
+                margin-bottom: 1rem;
+            }
+            
+            .logo::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .timeline::after {
+                left: 31px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            
+            .timeline-item:nth-child(even) {
+                left: 0;
+            }
+            
+            .timeline-item::after {
+                left: 18px;
+            }
+            
+            .timeline-item:nth-child(odd)::after {
+                right: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo">伊江島マラソン</div>
+            <nav>
+                <ul>
+                    <li><a href="#home">ホーム</a></li>
+                    <li><a href="#members">メンバー</a></li>
+                    <li><a href="#schedule">スケジュール</a></li>
+                    <li><a href="#location">観光スポット</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <section id="home" class="hero">
+        <div class="container">
+            <h1>2025伊江島マラソン＆観光</h1>
+            <p>沖縄の美しい伊江島でのマラソン大会と観光を楽しむ2日間の旅程。チームで挑戦し、思い出を作りましょう！</p>
+            <a href="#schedule" class="cta-button">スケジュールを見る <i class="fas fa-arrow-right"></i></a>
+        </div>
+    </section>
+    
+    <section id="members" class="members-section">
+        <div class="container">
+            <h2 class="section-title">参加メンバー</h2>
+            <div class="members-grid">
+                <div class="member-card">
+                    <img src="/api/placeholder/400/400" alt="道下さん" class="member-image">
+                    <div class="member-info">
+                        <h3 class="member-name">道下さん</h3>
+                        <p class="member-role">県立南部医療センター・子ども医療センター マスターオブパブリックヘルスナース</p>
+                        <p class="member-desc">マラソン経験豊富なチームのリーダー。健康管理のエキスパートとして皆をサポート。</p>
+                    </div>
+                </div>
+                
+                <div class="member-card">
+                    <img src="/api/placeholder/400/400" alt="井上さん" class="member-image">
+                    <div class="member-info">
+                        <h3 class="member-name">井上さん</h3>
+                        <p class="member-role">ハートライフ病院 看護師 ベイビー</p>
+                        <p class="member-desc">チームの癒し担当。明るい笑顔で周りを元気にする頼もしい存在。</p>
+                    </div>
+                </div>
+                
+                <div class="member-card">
+                    <img src="/api/placeholder/400/400" alt="大山さん" class="member-image">
+                    <div class="member-info">
+                        <h3 class="member-name">大山さん</h3>
+                        <p class="member-role">プロヘブバンプレイヤー</p>
+                        <p class="member-desc">音楽とマラソンを愛する多才なアーティスト。旅の雰囲気を盛り上げる。</p>
+                    </div>
+                </div>
+                
+                <div class="member-card">
+                    <img src="/api/placeholder/400/400" alt="長嶺さん" class="member-image">
+                    <div class="member-info">
+                        <h3 class="member-name">長嶺さん</h3>
+                        <p class="member-role">応援団長 若頭</p>
+                        <p class="member-desc">チームの熱い応援リーダー。声援で全員のパフォーマンスを引き上げる。</p>
+                    </div>
+                </div>
+                
+                <div class="member-card">
+                    <img src="/api/placeholder/400/400" alt="あむろさん" class="member-image">
+                    <div class="member-info">
+                        <h3 class="member-name">あむろさん</h3>
+                        <p class="member-role">フサフサナース</p>
+                        <p class="member-desc">気配り上手なチームの癒し系。マラソン後のケアのスペシャリスト。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="schedule" class="schedule-section">
+        <div class="container">
+            <h2 class="section-title">スケジュール</h2>
+            
+            <div class="day-tabs">
+                <button class="day-tab active" data-day="day1">4月12日（土）</button>
+                <button class="day-tab" data-day="day2">4月13日（日）</button>
+            </div>
+            
+            <div id="day1" class="schedule-content active">
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <span class="timeline-date">9:30</span>
+                            <h3>本部港集合</h3>
+                            <p>全員揃って出発準備を行います。忘れ物のないようにしましょう！</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <span class="timeline-date">10:00</span>
+                            <h3>本部港フェリー出発</h3>
+                            <p>伊江島へ向けてフェリーで出発します。約30分の船旅をお楽しみください。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <span class="timeline-date">10:30</span>
+                            <h3>伊江島到着・受付</h3>
+                            <p>伊江島に到着後、マラソン大会の受付を行います。その後、腹ごしらえとウォーミングアップの時間です。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <span class="timeline-date">13:00</span>
+                            <h3>ハーフマラソンスタート</h3>
+                            <p>いよいよマラソン開始！美しい伊江島の景色を楽しみながら走りましょう。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <span class="timeline-date">16:00</span>
+                            <h3>ハーフマラソン制限時間終了</h3>
+                            <p>完走おめでとうございます！疲れを癒す時間です。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <span class="timeline-date">17:00</span>
+                            <h3>伊江島フェリー出発</h3>
+                            <p>伊江島を後にし、本部港へ戻ります。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <span class="timeline-date">17:30</span>
+                            <h3>本部港着</h3>
+                            <p>本部港に到着、ホテルへ向かう準備をします。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <span class="timeline-date">18:00</span>
+                            <h3>ホテルへ移動</h3>
+                            <p>ホテルマハイナ ウェルネスリゾート オキナワへ移動します（移動時間：約15分）</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <span class="timeline-date">18:30</span>
+                            <h3>チェックイン・入浴</h3>
+                            <p>ホテルにチェックインし、交代で温泉に入ります。マラソンの疲れを癒しましょう。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <span class="timeline-date">19:30</span>
+                            <h3>打ち上げ</h3>
+                            <p>居酒屋「美ら海太郎」で打ち上げパーティー（営業終了22時）</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <span class="timeline-date">22:00</span>
+                            <h3>コンビニで買い出し・自由行動</h3>
+                            <p>コンビニで買い出し後、ホテルで自由に過ごします。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="day2" class="schedule-content">
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <span class="timeline-date">8:30</span>
+                            <h3>起床・身支度</h3>
+                            <p>朝の支度を整えて、観光2日目のスタートです。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <span class="timeline-date">9:30</span>
+                            <h3>モーニング</h3>
+                            <p>カフェスコール（もしくはスタバかポータマ）で朝食。海洋博公園内（9:30営業開始）</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <span class="timeline-date">10:30</span>
+                            <h3>グラウンドゴルフ</h3>
+                            <p>海洋博公園でグラウンドゴルフを楽しみます（無料）</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <span class="timeline-date">13:00</span>
+                            <h3>ゴルフ終了・移動</h3>
+                            <p>古宇利島へ移動します（移動時間：約30分）</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <span class="timeline-date">13:30</span>
+                            <h3>ランチ</h3>
+                            <p>古宇利島の「しらさ食堂」でランチを楽しみます。

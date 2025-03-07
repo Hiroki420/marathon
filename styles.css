@@ -1,144 +1,282 @@
-# 伊江島マラソンサイト - CSS・JS実装ガイド
+/* 伊江島マラソンWebサイト スタイルシート */
 
-このガイドでは、伊江島マラソンサイトにデザイン性を追加するためのCSS実装と、スクロールアニメーションを実現するためのJavaScriptの組み込み方法を説明します。
-
-## GitHubでの実装手順
-
-### 1. CSSファイルの作成
-
-1. GitHubリポジトリで「Add file」→「Create new file」を選択
-2. ファイル名に `styles.css` と入力
-3. 提供したCSSコードをコピー＆ペーストします
-4. 「Commit new file」ボタンをクリックして保存
-
-### 2. HTMLファイルの更新
-
-既存のHTMLファイル（index.html）を更新して、新しいCSSファイルをリンクし、JavaScriptを追加します：
-
-1. index.htmlファイルをクリック
-2. 編集ボタン（鉛筆アイコン）をクリック
-3. `<head>` タグ内に以下のリンクを追加（既存のスタイルの代わりに）：
-
-```html
-
-```
-
-4. `</body>` タグの直前に以下のJavaScriptコードを追加：
-
-```html
-
-document.addEventListener('DOMContentLoaded', function() {
-    // 各セクションにfade-inクラスを追加
-    const sections = document.querySelectorAll('.members-section, .schedule-section, .location-section');
-    sections.forEach(section => {
-        section.classList.add('fade-in');
-    });
-    
-    // スクロール時のアニメーション
-    function checkScroll() {
-        const fadeElements = document.querySelectorAll('.fade-in');
-        fadeElements.forEach(element => {
-            const elementTop = element.getBoundingClientRect().top;
-            const windowHeight = window.innerHeight;
-            if (elementTop < windowHeight - 100) {
-                element.classList.add('visible');
-            }
-        });
-        
-        // タイムラインアイテムのアニメーション
-        const timelineItems = document.querySelectorAll('.timeline-item');
-        timelineItems.forEach(item => {
-            const itemTop = item.getBoundingClientRect().top;
-            if (itemTop < window.innerHeight - 50) {
-                item.classList.add('visible');
-            }
-        });
-    }
-    
-    // 初回チェック
-    checkScroll();
-    
-    // スクロール時にチェック
-    window.addEventListener('scroll', checkScroll);
-    
-    // タブの切り替え
-    const dayTabs = document.querySelectorAll('.day-tab');
-    const scheduleContents = document.querySelectorAll('.schedule-content');
-    
-    dayTabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            const day = tab.getAttribute('data-day');
-            
-            // タブのアクティブ状態を切り替え
-            dayTabs.forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            
-            // コンテンツの表示を切り替え
-            scheduleContents.forEach(content => {
-                content.classList.remove('active');
-                if (content.id === day) {
-                    content.classList.add('active');
-                }
-            });
-            
-            // タイムラインアイテムのアニメーションをリセット
-            const timelineItems = document.querySelectorAll(`#${day} .timeline-item`);
-            timelineItems.forEach((item, index) => {
-                item.classList.remove('visible');
-                setTimeout(() => {
-                    item.classList.add('visible');
-                }, index * 100);
-            });
-        });
-    });
-});
-
-```
-
-5. 「Commit changes」ボタンをクリックして保存
-
-### 3. フォントの追加
-
-Google Fontsを使用するために、HTMLの`<head>`セクションに以下のコードを追加します：
-
-```html
-
-
-
-```
-
-### 4. 実際の画像の追加（オプション）
-
-プレースホルダー画像を実際の写真に置き換える場合：
-
-1. 画像ファイルをGitHubリポジトリにアップロード（「Add file」→「Upload files」）
-2. 画像は「images」フォルダを作成して整理するのがおすすめです
-3. HTMLファイル内の画像パスを更新します：
-   - `/api/placeholder/400/400` を `images/あなたの画像ファイル名.jpg` などに変更
-
-## スタイルのカスタマイズ
-
-### カラーテーマの変更
-
-styles.cssファイルの先頭にある`:root`セクションで色を変更できます：
-
-```css
+/* グラデーションとカラーパレットの定義 */
 :root {
-    --primary: #色コード;
-    --primary-light: #色コード;
-    --secondary: #色コード;
-    --secondary-light: #色コード;
-    --accent: #色コード;
-    /* 他の色も同様に変更可能 */
+    --primary: #0088cc;
+    --primary-light: #33aaee;
+    --secondary: #00cc88;
+    --secondary-light: #33eebb;
+    --accent: #ffbb33;
+    --accent-light: #ffdd77;
+    --dark: #2c3e50;
+    --light: #ecf0f1;
+    --text: #34495e;
+    --subtle: rgba(44, 62, 80, 0.05);
 }
-```
 
-### アニメーション効果の調整
-
-より強いアニメーション効果が欲しい場合は、以下のセクションの値を調整します：
-
-```css
-.member-card:hover {
-    transform: translateY(-15px) scale(1.03); /* 値を大きくするとより強い効果になります */
+/* 基本スタイル */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Noto Sans JP', sans-serif;
 }
-```
+
+body {
+    background-color: var(--light);
+    color: var(--text);
+    overflow-x: hidden;
+    position: relative;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/api/placeholder/1920/1080');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.1;
+    z-index: -1;
+    background-attachment: fixed;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* ヘッダースタイル */
+header {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    padding: 2rem 0;
+    margin-bottom: 3rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+header::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(ellipse at center, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
+    animation: shimmer 15s infinite linear;
+    pointer-events: none;
+}
+
+@keyframes shimmer {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.logo {
+    font-size: 2.5rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    position: relative;
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    transition: all 0.5s ease;
+}
+
+.logo::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background-color: var(--accent);
+    transition: width 0.3s ease;
+}
+
+.logo:hover {
+    transform: scale(1.05);
+    text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+}
+
+.logo:hover::after {
+    width: 100%;
+}
+
+/* ナビゲーションスタイル */
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 30px;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+nav a::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    background: var(--accent);
+    transition: height 0.3s ease;
+    z-index: -1;
+    opacity: 0.1;
+    border-radius: 30px;
+}
+
+nav a:hover {
+    transform: translateY(-3px);
+}
+
+nav a:hover::before {
+    height: 100%;
+    opacity: 0.2;
+}
+
+/* ヒーローセクション */
+.hero {
+    text-align: center;
+    margin: 4rem 0;
+    position: relative;
+    padding: 6rem 0;
+    overflow: hidden;
+}
+
+.hero::after {
+    content: "";
+    position: absolute;
+    bottom: -50px;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(to bottom right, var(--primary-light) 0%, transparent 50%, var(--secondary-light) 100%);
+    opacity: 0.05;
+    transform: skewY(-3deg);
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: fadeInUp 1s ease;
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+}
+
+.hero p {
+    font-size: 1.25rem;
+    max-width: 800px;
+    margin: 0 auto 2rem;
+    line-height: 1.6;
+    color: var(--dark);
+    animation: fadeInUp 1s ease 0.2s both;
+}
+
+/* アクションボタン */
+.cta-button {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    border-radius: 50px;
+    font-weight: bold;
+    text-decoration: none;
+    box-shadow: 0 5px 20px rgba(0, 136, 204, 0.3);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation: bounceIn 1s ease 0.4s both;
+    position: relative;
+    overflow: hidden;
+    letter-spacing: 1px;
+}
+
+.cta-button:hover {
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 10px 30px rgba(0, 136, 204, 0.4);
+}
+
+.cta-button::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    animation: shine 3s infinite;
+}
+
+@keyframes shine {
+    0% { left: -100%; }
+    20% { left: 100%; }
+    100% { left: 100%; }
+}
+
+/* セクションタイトル */
+.section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    position: relative;
+    display: inline-block;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.section-title::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+}
+
+/* メンバーセクション */
+.members-section {
+    margin: 6rem 0;
+    position: relative;
+}
+
+.members-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.member-card {
+    background-color: white;
+    border-radius

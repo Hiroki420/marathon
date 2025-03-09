@@ -1,4 +1,4 @@
-// 伊江島マラソンサイト - スクロールアニメーション強化
+// 伊江島マラソンサイト - スクロールアニメーション修正版
 
 document.addEventListener('DOMContentLoaded', function() {
     // 各要素にアニメーションクラスを追加
@@ -7,11 +7,14 @@ document.addEventListener('DOMContentLoaded', function() {
         section.classList.add('fade-in');
     });
     
-    // メンバーカードにアニメーションを追加
+    // メンバーカードの初期表示を保証
     const memberCards = document.querySelectorAll('.member-card');
-    memberCards.forEach(card => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(50px)';
+    memberCards.forEach((card, index) => {
+        // デフォルトで表示されるよう設定
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
+        // アニメーションを追加（オプション）
+        card.style.animation = `fadeInUp 0.5s ease ${index * 0.1}s`;
     });
     
     // 観光スポットカードにアニメーションを追加
@@ -30,19 +33,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const windowHeight = window.innerHeight;
             if (elementTop < windowHeight - 100) {
                 element.classList.add('visible');
-            }
-        });
-        
-        // メンバーカードのアニメーション
-        memberCards.forEach((card, index) => {
-            const cardTop = card.getBoundingClientRect().top;
-            const windowHeight = window.innerHeight;
-            if (cardTop < windowHeight - 50) {
-                setTimeout(() => {
-                    card.style.opacity = '1';
-                    card.style.transform = 'translateY(0)';
-                    card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-                }, index * 150);
             }
         });
         

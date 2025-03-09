@@ -5,13 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>2025伊江島マラソン＆観光 | スケジュール管理</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=M+PLUS+Rounded+1c:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
-<script src="scripts.js"></script>
 <body>
     <header>
         <div class="header-container">
@@ -40,7 +38,7 @@
             <h2 class="section-title">参加メンバー</h2>
             <div class="members-grid">
                 <div class="member-card">
-                    <img src="https://hiroki420.github.io/marathon/member1.jpg" alt="道下さん" class="member-image">
+                    <img src="./member1.jpg" alt="道下さん" class="member-image">
                     <div class="member-info">
                         <h3 class="member-name">道下さん</h3>
                         <p class="member-role">県立南部医療センター・子ども医療センター マスターオブパブリックヘルスナース</p>
@@ -49,7 +47,7 @@
                 </div>
                 
                 <div class="member-card">
-                    <img src="https://hiroki420.github.io/marathon/member2.jpg" alt="井上さん" class="member-image">
+                    <img src="./member2.jpg" alt="井上さん" class="member-image">
                     <div class="member-info">
                         <h3 class="member-name">井上さん</h3>
                         <p class="member-role">ハートライフ病院 看護師 ベイビー</p>
@@ -58,7 +56,7 @@
                 </div>
                 
                 <div class="member-card">
-                    <img src="https://hiroki420.github.io/marathon/member3.jpg" alt="大山さん" class="member-image">
+                    <img src="./member3.jpg" alt="大山さん" class="member-image">
                     <div class="member-info">
                         <h3 class="member-name">大山さん</h3>
                         <p class="member-role">プロヘブバンプレイヤー</p>
@@ -67,7 +65,7 @@
                 </div>
                 
                 <div class="member-card">
-                    <img src="https://hiroki420.github.io/marathon/member4.jpg" alt="長嶺さん" class="member-image">
+                    <img src="./member4.jpg" alt="長嶺さん" class="member-image">
                     <div class="member-info">
                         <h3 class="member-name">長嶺さん</h3>
                         <p class="member-role">応援団長 若頭</p>
@@ -76,7 +74,7 @@
                 </div>
                 
                 <div class="member-card">
-                    <img src="https://hiroki420.github.io/marathon/member5.jpg" alt="あむろさん" class="member-image">
+                    <img src="./member5.jpg" alt="あむろさん" class="member-image">
                     <div class="member-info">
                         <h3 class="member-name">あむろさん</h3>
                         <p class="member-role">フサフサナース</p>
@@ -336,72 +334,6 @@
         </div>
     </footer>
     
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // 各セクションにfade-inクラスを追加
-        const sections = document.querySelectorAll('.members-section, .schedule-section, .location-section');
-        sections.forEach(section => {
-            section.classList.add('fade-in');
-        });
-        
-        // スクロール時のアニメーション
-        function checkScroll() {
-            const fadeElements = document.querySelectorAll('.fade-in');
-            fadeElements.forEach(element => {
-                const elementTop = element.getBoundingClientRect().top;
-                const windowHeight = window.innerHeight;
-                if (elementTop < windowHeight - 100) {
-                    element.classList.add('visible');
-                }
-            });
-            
-            // タイムラインアイテムのアニメーション
-            const timelineItems = document.querySelectorAll('.timeline-item');
-            timelineItems.forEach(item => {
-                const itemTop = item.getBoundingClientRect().top;
-                if (itemTop < window.innerHeight - 50) {
-                    item.classList.add('visible');
-                }
-            });
-        }
-        
-        // 初回チェック
-        checkScroll();
-        
-        // スクロール時にチェック
-        window.addEventListener('scroll', checkScroll);
-        
-        // タブの切り替え
-        const dayTabs = document.querySelectorAll('.day-tab');
-        const scheduleContents = document.querySelectorAll('.schedule-content');
-        
-        dayTabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                const day = tab.getAttribute('data-day');
-                
-                // タブのアクティブ状態を切り替え
-                dayTabs.forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                
-                // コンテンツの表示を切り替え
-                scheduleContents.forEach(content => {
-                    content.classList.remove('active');
-                    if (content.id === day) {
-                        content.classList.add('active');
-                    }
-                });
-                
-                // タイムラインアイテムのアニメーションをリセット
-                const timelineItems = document.querySelectorAll(`#${day} .timeline-item`);
-                timelineItems.forEach((item, index) => {
-                    item.classList.remove('visible');
-                    setTimeout(() => {
-                        item.classList.add('visible');
-                    }, index * 100);
-                });
-            });
-        });
-    });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>

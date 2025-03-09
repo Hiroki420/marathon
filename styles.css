@@ -1,36 +1,43 @@
-/* メンバーカード部分の修正CSS */
-
-.member-card {
-    background-color: white;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    opacity: 1; /* 必ず表示されるように設定 */
-    transform: translateY(0); /* 初期位置を正常に */
-    animation: fadeInUp 0.8s forwards;
+opacity: 0.8;
 }
 
-.member-card:hover {
-    transform: translateY(-15px) scale(1.03);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+/* スクロールアニメーション */
+.fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
-.member-card:nth-child(1) { animation-delay: 0.1s; }
-.member-card:nth-child(2) { animation-delay: 0.2s; }
-.member-card:nth-child(3) { animation-delay: 0.3s; }
-.member-card:nth-child(4) { animation-delay: 0.4s; }
-.member-card:nth-child(5) { animation-delay: 0.5s; }
-
-.member-image {
-    width: 100%;
-    height: 250px;
-    object-fit: cover;
-    transition: all 0.5s ease;
-    border-bottom: 3px solid var(--primary);
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
-/* 画像が表示されなかった場合のフォールバック */
+/* タイムラインアニメーション */
+.timeline-item {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.timeline-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* カード用のアニメーション */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 画像エラー表示用のフォールバック */
 .member-image:not([src]), 
 .member-image[src=""], 
 .member-image[src="undefined"] {
@@ -48,4 +55,70 @@
     position: absolute;
     font-size: 1.2rem;
     color: #999;
+}
+
+/* レスポンシブデザイン */
+@media (max-width: 768px) {
+    .header-container {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .logo {
+        margin-bottom: 1rem;
+    }
+    
+    nav ul {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .hero h1 {
+        font-size: 2rem;
+    }
+    
+    .timeline::after {
+        left: 31px;
+    }
+    
+    .timeline-item {
+        width: 100%;
+        padding-left: 50px;
+        padding-right: 10px;
+    }
+    
+    .timeline-item:nth-child(even) {
+        left: 0;
+    }
+    
+    .timeline-item::after {
+        left: 18px;
+    }
+    
+    .timeline-item:nth-child(odd)::after {
+        right: auto;
+    }
+    
+    .members-grid,
+    .location-cards {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* スクロールバーのカスタマイズ */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--light);
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(var(--primary), var(--secondary));
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(var(--primary-light), var(--secondary-light));
 }
